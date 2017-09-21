@@ -526,6 +526,8 @@ function isInterfaceType(t) {
         return false;
     return (t.idlType !== "DOMString" &&
             t.idlType !== "DOMTimeStamp" &&
+            t.idlType !== "RenderingContext" &&
+            t.idlType !== "NativeImageData" &&
             !(t.idlType in callbackTypes) &&
             t.idlType !== t.idlType.toLowerCase())
 }
