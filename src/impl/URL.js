@@ -163,3 +163,20 @@ URL.prototype = {
         }
     },
 };
+
+URL.urlObjectIndex = 0;
+URL.createObjectURL = function (blob) {
+    URL.objects.push({ data: blob, key: URL.urlObjectIndex });
+    return URL.urlObjectIndex++;
+};
+
+URL.revokeObjectURL = function (url) {
+    for (var index = 0; index < URL.objects.length; index++) {
+        if (url === URL.objects[index].key) {
+            URL.objects.splice(index, 1);
+            break;
+        }
+    }
+};
+
+URL.objects = [];
