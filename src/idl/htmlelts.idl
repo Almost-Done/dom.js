@@ -399,6 +399,7 @@ interface HTMLCanvasElement : HTMLElement {
            attribute unsigned long height;
   readonly attribute unsigned long clientWidth;
   readonly attribute unsigned long clientHeight;
+  RenderingContext getContext(DOMString type);
 };
 
 interface HTMLHoloCanvasElementExp : HTMLElement {
@@ -440,6 +441,7 @@ interface HTMLImageElement : HTMLElement {
   readonly attribute unsigned long naturalWidth;
   readonly attribute unsigned long naturalHeight;
   readonly attribute boolean complete;
+  NativeImageData getData();
 };
 
 interface HTMLIFrameElement : HTMLElement {

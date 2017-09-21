@@ -464,7 +464,21 @@ defineLazyProperty(impl, "HTMLCanvasElement", function() {
     }
 
     HTMLCanvasElement.prototype = O.create(impl.HTMLElement.prototype, {
-        _idlName: constant("HTMLCanvasElement")
+        _idlName: constant("HTMLCanvasElement"),
+
+        getContext: constant(function getContext(contextType) {
+            if (contextType === '2d') {
+                if (this.context) {
+                    return this.context;
+                } else {
+                    this.context = new holographic.nativeInterface.makeRenderingContext(this);
+                    this.context._idlName = "RenderingContext";
+                    return this.context;
+                }
+            } else {
+                return null;
+            }
+        }),
     });
 
     return HTMLCanvasElement;
@@ -751,14 +765,54 @@ defineLazyProperty(impl, "HTMLIFrameElement", function() {
 
 defineLazyProperty(impl, "HTMLImageElement", function() {
     function HTMLImageElement(doc, localName, prefix) {
+        this.native = new holographic.nativeInterface.image.createImage();
+
+        this.nativeCallback = function(type) {
+            if (type === 'load' && arguments.length > 2) {
+                this.width = arguments[1];
+                this.height = arguments[2];
+                holographic.nativeInterface.eventing.removeCallback(this.native);
+
+                var loadEvent = this.ownerDocument.createEvent("Event");
+                loadEvent.initEvent("load", true, true);
+                this.dispatchEvent(loadEvent);
+            }
+        };
+
+        Object.defineProperty(this, "src", {
+            set: function setSrc(value) {
+                this.source = value;
+                var isBlob = false;
+                for (var index = 0; index < URL.objects.length; index++) {
+                    if (value === URL.objects[index].key) {
+                        holographic.nativeInterface.image.setImageSourceFromBlob(this.native, URL.objects[index].data);
+                        holographic.nativeInterface.eventing.setCallback(this.native, this.nativeCallback.bind(this));
+                        isBlob = true;
+                        break;
+                    }
+                }
+                if (!isBlob) {
+                    holographic.nativeInterface.image.setImageSource(this.native, value);
+                    holographic.nativeInterface.eventing.setCallback(this.native, this.nativeCallback.bind(this));
+                }
+            },
+            get: function getSrc() {
+                return this.source;
+            }
+        });
+
         impl.HTMLElement.call(this, doc, localName, prefix);
     }
 
     HTMLImageElement.prototype = O.create(impl.HTMLElement.prototype, {
         _idlName: constant("HTMLImageElement"),
+
+        getData: constant(function getData() {
+            return this.native;      
+        }),
+
     });
 
-    // XXX impl.Element.reflectURLAttribute(HTMLImageElement, "src");
     // XXX: I don't know whether to reflect crossorigin as a string or
     // as an enumerated attribute. Since it is not "limited to only
     // known values", I think it is just a string
