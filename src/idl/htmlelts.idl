@@ -394,6 +394,23 @@ interface HTMLAnchorElement : HTMLElement {
            attribute DOMString hash;
 };
 
+interface HTMLCanvasElement : HTMLElement {
+           attribute unsigned long width;
+           attribute unsigned long height;
+  readonly attribute unsigned long clientWidth;
+  readonly attribute unsigned long clientHeight;
+};
+
+interface HTMLHoloCanvasElementExp : HTMLElement {
+           attribute unsigned long width;
+           attribute unsigned long height;
+  readonly attribute unsigned long clientWidth;
+  readonly attribute unsigned long clientHeight;
+  RenderingContext getContext(DOMString type);
+  DOMRect getBoundingClientRect();
+};
+
+
 interface HTMLTimeElement : HTMLElement {
            attribute DOMString dateTime;
            attribute boolean pubDate;

@@ -15,6 +15,7 @@ var tagNameToInterfaceName = {
     "br": "HTMLBRElement",
     "button": "HTMLButtonElement",
     "canvas": "HTMLCanvasElement",
+    "exp-holo-canvas": "HTMLHoloCanvasElementExp",
     "caption": "HTMLTableCaptionElement",
     "cite": "HTMLElement",
     "code": "HTMLElement",
@@ -455,6 +456,80 @@ defineLazyProperty(impl, "HTMLButtonElement", function() {
 
 
     return HTMLButtonElement;
+});
+
+defineLazyProperty(impl, "HTMLCanvasElement", function() {
+    function HTMLCanvasElement(doc, localName, prefix) {
+        impl.HTMLElement.call(this, doc, localName, prefix);
+    }
+
+    HTMLCanvasElement.prototype = O.create(impl.HTMLElement.prototype, {
+        _idlName: constant("HTMLCanvasElement")
+    });
+
+    return HTMLCanvasElement;
+});
+
+defineLazyProperty(impl, "HTMLHoloCanvasElementExp", function() {
+    function HTMLHoloCanvasElementExp(doc, localName, prefix) {
+        this.width = this.clientWidth = window.width;
+        this.height = this.clientHeight = window.height;
+        holographic.canvas = this;
+        impl.HTMLElement.call(this, doc, localName, prefix);
+    }
+
+    HTMLHoloCanvasElementExp.prototype = O.create(impl.HTMLElement.prototype, {
+        _idlName: constant("HTMLHoloCanvasElementExp"),
+
+        getBoundingClientRect: constant(function getBoundingClientRect() {
+            var rect = {};
+            rect.top = 0;
+            rect.bottom = this.height;
+
+            rect.width = this.width;
+            rect.height = this.height;
+
+            rect.left = 0;
+            rect.right = this.width;
+
+            rect.x = 0;
+            rect.y = 0;
+
+            return rect;
+        }),
+
+        getContext: constant(function getContext(contextType) {
+            if (contextType === 'experimental-webgl' || contextType === 'webgl') {
+                if (this.context) {
+                    return this.context;
+                } else {
+                    this.context = new holographic.nativeInterface.makeWebGLRenderingContext();
+                    this.context._idlName = "RenderingContext";
+                    return this.context;
+                }
+            } else {
+                return null;
+            }
+        }),
+
+        dispatchMouseFromWindow: constant(function dispatchMouseFromWindow(x, y, button, action) {
+            var event = this.ownerDocument.createEvent("MouseEvent");
+
+            event.initMouseEvent(action, true, true,
+                                 this.ownerDocument.defaultView, 1,
+                                 x, y, x, y,
+                                 // These 4 should be initialized with
+                                 // the actually current keyboard state
+                                 // somehow...
+                                 false, false, false, false,
+                                 button, null)
+
+            // Dispatch this as an untrusted event since it is synthetic
+            var success = this.dispatchEvent(event);
+        }),
+    });
+
+    return HTMLHoloCanvasElementExp;
 });
 
 defineLazyProperty(impl, "HTMLCommandElement", function() {
