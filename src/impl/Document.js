@@ -44,7 +44,8 @@ defineLazyProperty(impl, "Document", function() {
         event: "Event",
         customevent: "CustomEvent",
         uievent: "UIEvent",
-        mouseevent: "MouseEvent"
+        mouseevent: "MouseEvent",
+        keyboardevent: "KeyboardEvent"
     };
 
     // Certain arguments to document.createEvent() must be treated specially

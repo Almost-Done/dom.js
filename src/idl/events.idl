@@ -40,3 +40,9 @@ interface MouseEvent : UIEvent {
   // Introduced in DOM Level 3:
   boolean                            getModifierState(in DOMString keyArg);
 };
+
+interface KeyboardEvent : UIEvent {
+  readonly attribute DOMString       key;
+  void                               initKeyboardEvent(in DOMString type,
+                                              in DOMString key);
+};

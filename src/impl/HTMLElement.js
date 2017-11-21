@@ -490,6 +490,19 @@ defineLazyProperty(impl, "HTMLHoloCanvasElementExp", function() {
         this.height = this.clientHeight = window.height;
         holographic.canvas = this;
         impl.HTMLElement.call(this, doc, localName, prefix);
+
+        this.addEventListenerXXX = this.addEventListener;
+        this.removeEventListenerXXX = this.removeEventListener;
+        
+        this.addEventListener = function (type, listener, capture) {
+            holographic.nativeInterface.input.addEventListener(type);
+            this.addEventListenerXXX(type, listener, capture);
+        };
+        
+        this.removeEventListener = function (type, listener, capture) {
+            holographic.nativeInterface.input.removeEventListener(type);
+            this.removeEventListenerXXX(type, listener, capture);
+        };
     }
 
     HTMLHoloCanvasElementExp.prototype = O.create(impl.HTMLElement.prototype, {
@@ -536,11 +549,31 @@ defineLazyProperty(impl, "HTMLHoloCanvasElementExp", function() {
                                  // the actually current keyboard state
                                  // somehow...
                                  false, false, false, false,
-                                 button, null)
+                                 button, null);
 
             // Dispatch this as an untrusted event since it is synthetic
             var success = this.dispatchEvent(event);
         }),
+
+        dispatchKeyboardFromWindow: constant(function dispatchKeyboardFromWindow(key, type) {
+            var keyEvent = this.ownerDocument.createEvent("KeyboardEvent");
+            keyEvent.initKeyboardEvent(type, key, true, true, )
+            keyEvent._initialized = true;
+
+            keyEvent._propagationStopped = false;
+            keyEvent._immediatePropagationStopped = false;
+            keyEvent.defaultPrevented = false;
+            keyEvent.isTrusted = false;
+
+            keyEvent.target = null;
+            keyEvent.type = type;
+            keyEvent.bubbles = true;
+            keyEvent.cancelable = true;
+
+
+            keyEvent.key = key;
+            this.dispatchEvent(keyEvent);
+        })
     });
 
     return HTMLHoloCanvasElementExp;
