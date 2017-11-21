@@ -46,3 +46,17 @@ interface KeyboardEvent : UIEvent {
   void                               initKeyboardEvent(in DOMString type,
                                               in DOMString key);
 };
+
+interface SpatialInputEvent : UIEvent {
+  readonly attribute boolean         isPressed;
+  readonly attribute double          x;
+  readonly attribute double          y;
+  readonly attribute double          z;
+  readonly attribute long            sourceKind;
+  void                               initSpatialInputEvent(in DOMString type,
+                                              in boolean isPressedArg,
+                                              in double xArg,
+                                              in double yArg,
+                                              in double zArg,
+                                              in double sourceKindArg);
+};

@@ -557,23 +557,15 @@ defineLazyProperty(impl, "HTMLHoloCanvasElementExp", function() {
 
         dispatchKeyboardFromWindow: constant(function dispatchKeyboardFromWindow(key, type) {
             var keyEvent = this.ownerDocument.createEvent("KeyboardEvent");
-            keyEvent.initKeyboardEvent(type, key, true, true, )
-            keyEvent._initialized = true;
-
-            keyEvent._propagationStopped = false;
-            keyEvent._immediatePropagationStopped = false;
-            keyEvent.defaultPrevented = false;
-            keyEvent.isTrusted = false;
-
-            keyEvent.target = null;
-            keyEvent.type = type;
-            keyEvent.bubbles = true;
-            keyEvent.cancelable = true;
-
-
-            keyEvent.key = key;
+            keyEvent.initKeyboardEvent(type, key, true, true, );
             this.dispatchEvent(keyEvent);
-        })
+        }),
+
+        dispatchSpatialInputFromWindow: constant(function dispatchSpatialInputFromWindow(type, isPressedArg, xArg,  yArg, zArg, sourceKindArg) {
+            var spatialInputEvent = this.ownerDocument.createEvent("SpatialInputEvent");
+            spatialInputEvent.initSpatialInputEvent(type, isPressedArg, xArg, yArg, zArg, sourceKindArg, true, true, )
+            this.dispatchEvent(spatialInputEvent);
+        }),
     });
 
     return HTMLHoloCanvasElementExp;
