@@ -77,6 +77,17 @@ global.removeEventListener = function addEventListener(type, listener, capture){
         OptionalBoolean(capture));
 };
 
+Object.defineProperty(global, "spatialMappingOptions", {
+    get: function () {
+        return unwrap(this).spatialMappingOptions;
+    },
+    set: function (v) {
+        unwrap(this).spatialMappingOptions = v;
+    },
+    enumerable: false,
+    configurable: true, // XXX: check this
+});
+
 // XXX
 // This is a completely broken implementation put here just to see if we
 // can get jQuery animations to work
