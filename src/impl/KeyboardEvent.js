@@ -4,6 +4,7 @@ defineLazyProperty(impl, "KeyboardEvent", function() {
         impl.UIEvent.call(this);
 
         this.key = "\0";
+        this.keyCode = 0;
     }
     KeyboardEvent.prototype = O.create(impl.UIEvent.prototype, {
         _idlName: constant("KeyboardEvent"),
@@ -11,6 +12,7 @@ defineLazyProperty(impl, "KeyboardEvent", function() {
                                           view, detail) {
             this.initEvent(type, bubbles, cancelable, view, detail);
             this.key = key;
+            this.keyCode = key;
         }),
 
     });

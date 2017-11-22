@@ -41,8 +41,36 @@ interface MouseEvent : UIEvent {
   boolean                            getModifierState(in DOMString keyArg);
 };
 
+interface WheelEvent : MouseEvent {
+  readonly attribute long            deltaX;
+  readonly attribute long            deltaY;
+  readonly attribute long            deltaZ;
+  void                               initWheelEvent(in DOMString typeArg,
+                                                in boolean canBubbleArg,
+                                                in boolean cancelableArg,
+                                                in Window viewArg,
+                                                in long detailArg,
+                                                in long screenXArg,
+                                                in long screenYArg,
+                                                in long clientXArg,
+                                                in long clientYArg,
+                                                in long deltaXArg,
+                                                in long deltaYArg,
+                                                in long deltaZArg,
+                                                in boolean ctrlKeyArg,
+                                                in boolean altKeyArg,
+                                                in boolean shiftKeyArg,
+                                                in boolean metaKeyArg,
+                                                in unsigned short buttonArg,
+                                                in EventTarget relatedTargetArg);
+  // Introduced in DOM Level 3:
+  boolean                            getModifierState(in DOMString keyArg);
+};
+
+
 interface KeyboardEvent : UIEvent {
   readonly attribute DOMString       key;
+  readonly attribute long            keyCode;
   void                               initKeyboardEvent(in DOMString type,
                                               in DOMString key);
 };

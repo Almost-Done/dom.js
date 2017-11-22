@@ -6,6 +6,35 @@ function Window() {
     this.document._scripting_enabled = true;
     this.document.defaultView = this;
     this.location = new Location(this, "about:blank");
+
+    // These numbers must match native code
+    this.input = { "vsync": 5, "resize": 0 };
+
+    this.callbackFromNative = function (type) {
+        if (type === this.input.vsync) {
+            var capturedCallback = holographic.drawCallback;
+            holographic.drawCallback = null;
+            if (capturedCallback) {
+                capturedCallback();
+            }
+        } else if (type === this.input.resize) {
+            var resizeEvent = this.document.createEvent("Event");
+            resizeEvent.initEvent("resize", true, true);
+            this.dispatchEvent(resizeEvent);
+        } else if (type === holographic.input.mouse.id) {
+            holographic.input.mouse.dispatch(arguments[1], arguments[2], arguments[3], arguments[4], arguments[5]);
+        } else if (type === holographic.input.keyboard.id) {
+            holographic.input.keyboard.dispatch(arguments[1], arguments[2]);
+
+            var keyEvent = this.document.createEvent("KeyboardEvent");
+            keyEvent.initKeyboardEvent(holographic.input.keyboard.keyboardEvents[arguments[2]], arguments[1], true, true);
+            this.dispatchEvent(keyEvent);
+        } else if (type === holographic.input.spatial.id) {
+            holographic.input.spatial.dispatch(arguments[1], arguments[2], arguments[3], arguments[4], arguments[5], arguments[6]);
+        }
+    };
+
+    holographic.nativeInterface.window.setCallback(this.callbackFromNative.bind(this));
 }
 
 Window.prototype = O.create(impl.EventTarget.prototype, {
@@ -52,6 +81,4 @@ Window.prototype = O.create(impl.EventTarget.prototype, {
             this._setEventHandler("load", v);
         }
     ),
-
-
 });

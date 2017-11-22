@@ -32,6 +32,7 @@ FILES= \
 	src/impl/CustomEvent.js \
 	src/impl/UIEvent.js \
 	src/impl/MouseEvent.js \
+	src/impl/WheelEvent.js \
 	src/impl/KeyboardEvent.js \
 	src/impl/SpatialInputEvent.js \
 	src/impl/HTMLElement.js \
