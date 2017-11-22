@@ -58,7 +58,11 @@ function Window() {
     };
 
     this.removeEventListener = function (type, listener, capture) {
-        this.removeEventListenerXXX(type, listener, capture);
+        if (type === "spatialmapping") {
+            delete this.onSpatialMapping;
+        } else {
+            this.removeEventListenerXXX(type, listener, capture);
+        }
     };
 
     this._spatialMappingOptions = { scanExtentMeters: { x: 5, y: 5, z: 3 }, trianglesPerCubicMeter: 100 };
