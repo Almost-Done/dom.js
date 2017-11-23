@@ -522,6 +522,11 @@ defineLazyProperty(impl, "HTMLHoloCanvasElementExp", function() {
             holographic.nativeInterface.input.removeEventListener(type);
             this.removeEventListenerXXX(type, listener, capture);
         };
+
+        // The order of these events must match the native implementation
+        this.spatialInputEvents = ['sourcepress', 'sourcerelease', 'sourcelost', 'sourcedetected', 'sourceupdate'];
+        this.keyboardEvents = ['keydown', 'keyup'];
+        this.mouseEvents = ['mouseup', 'mousedown', 'mousemove', 'wheel'];
     }
 
     HTMLHoloCanvasElementExp.prototype = O.create(impl.HTMLElement.prototype, {
@@ -558,9 +563,20 @@ defineLazyProperty(impl, "HTMLHoloCanvasElementExp", function() {
             }
         }),
 
-        dispatchMouseFromWindow: constant(function dispatchMouseFromWindow(x, y, button, action, wheelDelta) {
+        dispatchMouseFromWindow: constant(function dispatchMouseFromWindow(x, y, button, actionId, wheelDelta) {
+            let event;
+            let realButton = button;
+            // Native button parameter is actually MouseEvent.buttons. Convert it to MouseEvent.button now
+            if (button & 1) {
+                realButton = 0;
+            } else if (button & 2) {
+                realButton = 2;
+            } else if (button & 4) {
+                realButton = 1;
+            }
 
-            var event;
+            let action = this.mouseEvents[actionId];
+            
             if (action ===  "wheel") {
                 event = this.ownerDocument.createEvent("WheelEvent");
                 event.initWheelEvent(action, true, true,
@@ -570,7 +586,7 @@ defineLazyProperty(impl, "HTMLHoloCanvasElementExp", function() {
                     // the actually current keyboard state
                     // somehow...
                     false, false, false, false,
-                    button, null);
+                    realButton, null);
             } else {
                 event = this.ownerDocument.createEvent("MouseEvent");
                 event.initMouseEvent(action, true, true,
@@ -580,22 +596,24 @@ defineLazyProperty(impl, "HTMLHoloCanvasElementExp", function() {
                     // the actually current keyboard state
                     // somehow...
                     false, false, false, false,
-                    button, null);
+                    realButton, null);
             }
 
             // Dispatch this as an untrusted event since it is synthetic
             var success = this.dispatchEvent(event);
+            return event;
         }),
 
-        dispatchKeyboardFromWindow: constant(function dispatchKeyboardFromWindow(key, type) {
+        dispatchKeyboardFromWindow: constant(function dispatchKeyboardFromWindow(key, typeId) {
             var keyEvent = this.ownerDocument.createEvent("KeyboardEvent");
-            keyEvent.initKeyboardEvent(type, key, true, true, );
+            keyEvent.initKeyboardEvent(this.keyboardEvents[typeId], key, true, true);
             this.dispatchEvent(keyEvent);
+            return keyEvent;
         }),
 
-        dispatchSpatialInputFromWindow: constant(function dispatchSpatialInputFromWindow(type, isPressedArg, xArg,  yArg, zArg, sourceKindArg) {
+        dispatchSpatialInputFromWindow: constant(function dispatchSpatialInputFromWindow(xArg,  yArg, zArg, isPressedArg, sourceKindArg, typeId) {
             var spatialInputEvent = this.ownerDocument.createEvent("SpatialInputEvent");
-            spatialInputEvent.initSpatialInputEvent(type, isPressedArg, xArg, yArg, zArg, sourceKindArg, true, true, )
+            spatialInputEvent.initSpatialInputEvent(this.spatialInputEvents[typeId], isPressedArg, xArg, yArg, zArg, sourceKindArg, true, true, )
             this.dispatchEvent(spatialInputEvent);
         }),
     });

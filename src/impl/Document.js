@@ -166,19 +166,7 @@ defineLazyProperty(impl, "Document", function() {
             }
         }),
 
-        dispatchMouseFromWindow: constant(function dispatchMouseFromWindow(x, y, button, action) {
-            var event = this.ownerDocument.createEvent("MouseEvent");
-
-            event.initMouseEvent(action, true, true,
-                                 this.ownerDocument.defaultView, 1,
-                                 x, y, x, y,
-                                 // These 4 should be initialized with
-                                 // the actually current keyboard state
-                                 // somehow...
-                                 false, false, false, false,
-                                 button, null)
-
-            // Dispatch this as an untrusted event since it is synthetic
+        dispatchMouseFromWindow: constant(function dispatchMouseFromWindow(event) {
             var success = this.dispatchEvent(event);
         }),
 
