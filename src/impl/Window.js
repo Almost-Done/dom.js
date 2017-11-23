@@ -8,7 +8,11 @@ function Window() {
     this.location = new Location(this, "about:blank");
 
     // These numbers must match native code
-    this.input = { "vsync": 5, "resize": 0, "spatialmapping" : 4, "spatialinput" : 3, "keyboard" : 2, "mouse" : 1};
+    this.input = { 
+        "resize": 0,  "mouse" : 1, "keyboard" : 2, 
+        "spatialinput" : 3, "spatialmapping" : 4, "vsync": 5,
+        "voice" : 6
+    };
 
     this.callbackFromNative = function (type) {
         if (type === this.input.vsync) {
@@ -33,6 +37,8 @@ function Window() {
             this.dispatchEvent(keyEvent);
         } else if (type === this.input.spatialinput) {
             holographic.canvas.dispatchSpatialInputFromWindow(arguments[1], arguments[2], arguments[3], arguments[4], arguments[5], arguments[6]);
+        } else if (type === this.input.voice) {
+            let keyEvent = holographic.canvas.dispatchVoiceFromWindow(arguments[1], arguments[2]);
         }
     };
 
@@ -49,6 +55,9 @@ function Window() {
                 this._spatialMappingOptions.scanExtentMeters.z,
                 this._spatialMappingOptions.trianglesPerCubicMeter);
             this.onSpatialMapping = listener;
+        } else if (type === "voicecommand") {
+            holographic.nativeInterface.input.addEventListener(type);
+            this.addEventListenerXXX(type, listener, capture);
         } else {
             this.addEventListenerXXX(type, listener, capture);
         }
@@ -57,12 +66,16 @@ function Window() {
     this.removeEventListener = function (type, listener, capture) {
         if (type === "spatialmapping") {
             delete this.onSpatialMapping;
+        } else if (type === "voicecommand") {
+            holographic.nativeInterface.input.removeEventListener(type);
+            this.removeEventListenerXXX(type, listener, capture);
         } else {
             this.removeEventListenerXXX(type, listener, capture);
         }
     };
 
     this._spatialMappingOptions = { scanExtentMeters: { x: 5, y: 5, z: 3 }, trianglesPerCubicMeter: 100 };
+    this._voiceCommands = [];
 }
 
 Window.prototype = O.create(impl.EventTarget.prototype, {
@@ -116,6 +129,16 @@ Window.prototype = O.create(impl.EventTarget.prototype, {
         },
         function (v) {
             this._spatialMappingOptions = v;
+        }
+    ),
+
+    voiceCommands: attribute(
+        function () {
+            return this._voiceCommands;
+        },
+        function (v) {
+            holographic.nativeInterface.input.setVoiceCommands(v);
+            this._voiceCommands = v;
         }
     ),
 });

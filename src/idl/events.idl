@@ -75,6 +75,12 @@ interface KeyboardEvent : UIEvent {
                                               in DOMString key);
 };
 
+interface VoiceEvent : UIEvent {
+  readonly attribute DOMString       command;
+  void                               initKeyboardEvent(in DOMString type,
+                                              in DOMString command);
+};
+
 interface SpatialInputEvent : UIEvent {
   readonly attribute boolean         isPressed;
   readonly attribute double          x;

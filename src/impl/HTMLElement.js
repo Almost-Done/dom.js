@@ -527,6 +527,7 @@ defineLazyProperty(impl, "HTMLHoloCanvasElementExp", function() {
         this.spatialInputEvents = ['sourcepress', 'sourcerelease', 'sourcelost', 'sourcedetected', 'sourceupdate'];
         this.keyboardEvents = ['keydown', 'keyup'];
         this.mouseEvents = ['mouseup', 'mousedown', 'mousemove', 'wheel'];
+        this.voiceEvents = ['command'];
     }
 
     HTMLHoloCanvasElementExp.prototype = O.create(impl.HTMLElement.prototype, {
@@ -600,19 +601,26 @@ defineLazyProperty(impl, "HTMLHoloCanvasElementExp", function() {
             }
 
             // Dispatch this as an untrusted event since it is synthetic
-            var success = this.dispatchEvent(event);
+            this.dispatchEvent(event);
             return event;
         }),
 
         dispatchKeyboardFromWindow: constant(function dispatchKeyboardFromWindow(key, typeId) {
-            var keyEvent = this.ownerDocument.createEvent("KeyboardEvent");
+            let keyEvent = this.ownerDocument.createEvent("KeyboardEvent");
             keyEvent.initKeyboardEvent(this.keyboardEvents[typeId], key, true, true);
             this.dispatchEvent(keyEvent);
             return keyEvent;
         }),
 
+        dispatchVoiceFromWindow: constant(function dispatchKeyboardFromWindow(command, typeId) {
+            let voiceEvent = this.ownerDocument.createEvent("VoiceEvent");
+            voiceEvent.initVoiceEvent(this.voiceEvents[typeId], command, true, true);
+            this.dispatchEvent(voiceEvent);
+            return voiceEvent;
+        }),
+
         dispatchSpatialInputFromWindow: constant(function dispatchSpatialInputFromWindow(xArg,  yArg, zArg, isPressedArg, sourceKindArg, typeId) {
-            var spatialInputEvent = this.ownerDocument.createEvent("SpatialInputEvent");
+            let spatialInputEvent = this.ownerDocument.createEvent("SpatialInputEvent");
             spatialInputEvent.initSpatialInputEvent(this.spatialInputEvents[typeId], isPressedArg, xArg, yArg, zArg, sourceKindArg, true, true, )
             this.dispatchEvent(spatialInputEvent);
         }),

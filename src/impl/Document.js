@@ -47,6 +47,7 @@ defineLazyProperty(impl, "Document", function() {
         mouseevent: "MouseEvent",
         keyboardevent: "KeyboardEvent",
         wheelevent: "WheelEvent",
+        voiceevent: "VoiceEvent",
         spatialinputevent: "SpatialInputEvent",
     };
 

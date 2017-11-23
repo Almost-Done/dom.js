@@ -88,6 +88,18 @@ Object.defineProperty(global, "spatialMappingOptions", {
     configurable: true, // XXX: check this
 });
 
+Object.defineProperty(global, "voiceCommands", {
+    get: function () {
+        return unwrap(this).voiceCommands;
+    },
+    set: function (v) {
+        unwrap(this).voiceCommands = v;
+    },
+    enumerable: false,
+    configurable: true, // XXX: check this
+});
+
+
 // XXX
 // This is a completely broken implementation put here just to see if we
 // can get jQuery animations to work
