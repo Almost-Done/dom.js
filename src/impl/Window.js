@@ -38,7 +38,8 @@ function Window() {
         } else if (type === this.input.spatialinput) {
             holographic.canvas.dispatchSpatialInputFromWindow(arguments[1], arguments[2], arguments[3], arguments[4], arguments[5], arguments[6]);
         } else if (type === this.input.voice) {
-            let keyEvent = holographic.canvas.dispatchVoiceFromWindow(arguments[1], arguments[2]);
+            let voiceEvent = holographic.canvas.dispatchVoiceFromWindow(arguments[1], arguments[2], arguments[3]);
+            this.dispatchEvent(voiceEvent);
         }
     };
 
@@ -55,7 +56,7 @@ function Window() {
                 this._spatialMappingOptions.scanExtentMeters.z,
                 this._spatialMappingOptions.trianglesPerCubicMeter);
             this.onSpatialMapping = listener;
-        } else if (type === "voicecommand") {
+        } else if (type === "voicecommand" || type === "keyup" || type === "keydown") {
             holographic.nativeInterface.input.addEventListener(type);
             this.addEventListenerXXX(type, listener, capture);
         } else {

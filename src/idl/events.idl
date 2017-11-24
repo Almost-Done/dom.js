@@ -77,8 +77,10 @@ interface KeyboardEvent : UIEvent {
 
 interface VoiceEvent : UIEvent {
   readonly attribute DOMString       command;
-  void                               initKeyboardEvent(in DOMString type,
-                                              in DOMString command);
+  readonly attribute double          confidence;
+  readonly attribute DOMString       type;
+  void                               VoiceEvent(in DOMString type,
+                                              in DOMString command, in double confidence);
 };
 
 interface SpatialInputEvent : UIEvent {

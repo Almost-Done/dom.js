@@ -34,6 +34,7 @@ FILES= \
 	src/impl/MouseEvent.js \
 	src/impl/WheelEvent.js \
 	src/impl/KeyboardEvent.js \
+	src/impl/VoiceEvent.js \
 	src/impl/SpatialInputEvent.js \
 	src/impl/HTMLElement.js \
 	src/impl/HTMLScriptElement.js \

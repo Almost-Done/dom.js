@@ -527,7 +527,7 @@ defineLazyProperty(impl, "HTMLHoloCanvasElementExp", function() {
         this.spatialInputEvents = ['sourcepress', 'sourcerelease', 'sourcelost', 'sourcedetected', 'sourceupdate'];
         this.keyboardEvents = ['keydown', 'keyup'];
         this.mouseEvents = ['mouseup', 'mousedown', 'mousemove', 'wheel'];
-        this.voiceEvents = ['command'];
+        this.voiceEvents = ['voicecommand'];
     }
 
     HTMLHoloCanvasElementExp.prototype = O.create(impl.HTMLElement.prototype, {
@@ -612,9 +612,9 @@ defineLazyProperty(impl, "HTMLHoloCanvasElementExp", function() {
             return keyEvent;
         }),
 
-        dispatchVoiceFromWindow: constant(function dispatchKeyboardFromWindow(command, typeId) {
+        dispatchVoiceFromWindow: constant(function dispatchVoiceFromWindow(typeId, command, confidence ) {
             let voiceEvent = this.ownerDocument.createEvent("VoiceEvent");
-            voiceEvent.initVoiceEvent(this.voiceEvents[typeId], command, true, true);
+            voiceEvent.initVoiceEvent(this.voiceEvents[typeId], command, confidence, true, true);
             this.dispatchEvent(voiceEvent);
             return voiceEvent;
         }),
