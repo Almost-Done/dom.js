@@ -39,7 +39,8 @@ wmset(idlToImplMap, global, w);
      });
  });
 
-Object.defineProperty(global, "location", {
+ // Remove the location property for HoloJs's DOM
+/*Object.defineProperty(global, "location", {
     get: function() {
         return wrap(unwrap(this).location);
     },
@@ -48,7 +49,7 @@ Object.defineProperty(global, "location", {
     },
     enumerable: false,
     configurable: true, // XXX: check this
-});
+});*/
 
 
 Object.defineProperty(global, "onload", {

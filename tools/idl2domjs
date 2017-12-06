@@ -313,10 +313,12 @@ function outputDictionaryMemberConversions(d) {
 function needsProxy(idl) {
     // If any of the members of this interface are getters, then
     // we need a proxy.
-    return idl.members.some(function(m) {
+    /*return idl.members.some(function(m) {
         return (m.type === "operation") &&
             (m.getter || m.setter || m.deleter || m.creator || m.caller);
-    });
+    });*/
+
+    return false;
 }
 
 

@@ -5,7 +5,6 @@ function Window() {
     this.document = new impl.DOMImplementation().createHTMLDocument("");
     this.document._scripting_enabled = true;
     this.document.defaultView = this;
-    this.location = new Location(this, "about:blank");
 
     // These numbers must match native code
     this.input = { 
