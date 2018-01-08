@@ -54,6 +54,10 @@ function OptionaltoLong(x){
     return x === undefined ? undefined : toLong(x);
 }
 
+function OptionaltoDouble(x){
+    return x === undefined ? undefined : toDouble(x);
+}
+
 function OptionalBoolean(x) {
     return (x === undefined) ? undefined : Boolean(x);
 }

@@ -400,6 +400,7 @@ interface HTMLCanvasElement : HTMLElement {
   readonly attribute unsigned long clientWidth;
   readonly attribute unsigned long clientHeight;
   RenderingContext getContext(DOMString type);
+  DOMString toDataURL(in DOMString type, in optional double encoderOptions);
 };
 
 interface HTMLHoloCanvasElementExp : HTMLElement {

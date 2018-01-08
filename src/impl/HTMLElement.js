@@ -498,6 +498,10 @@ defineLazyProperty(impl, "HTMLCanvasElement", function() {
                 holographic.nativeInterface.canvas2d.setHeight(this.context2D.ctxNative, value);
             }
         ),
+
+        toDataURL: constant(function toDataURL(type, encoderOptions) {
+            return holographic.nativeInterface.canvas2d.toDataURL(this.context2D.ctxNative, type, encoderOptions);
+        })
     });
 
     return HTMLCanvasElement;
