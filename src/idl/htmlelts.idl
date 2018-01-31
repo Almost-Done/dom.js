@@ -555,6 +555,7 @@ interface HTMLVideoElement : HTMLMediaElement {
   readonly attribute unsigned long videoWidth;
   readonly attribute unsigned long videoHeight;
            attribute DOMString poster;
+           NativeImageData getData();
 };
 
 [NamedConstructor=Audio(),

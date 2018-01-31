@@ -1644,10 +1644,47 @@ defineLazyProperty(impl, "HTMLAudioElement", function() {
 defineLazyProperty(impl, "HTMLVideoElement", function() {
     function HTMLVideoElement(doc, localName, prefix) {
         impl.HTMLMediaElement.call(this, doc, localName, prefix);
+
+        this.native = new holographic.nativeInterface.video.createVideo();
+
+        this.nativeCallback = function(type) {
+            if (type === 'load' && arguments.length > 2) {
+                this.width = this.videoWidth = arguments[1];
+                this.height = this.videoHeight = arguments[2];
+
+                holographic.nativeInterface.eventing.removeCallback(this.native);
+
+                this._readyState = HAVE_ENOUGH_DATA;
+
+                var loadEvent = this.ownerDocument.createEvent("Event");
+                loadEvent.initEvent("canplaythrough", true, true);
+                this.dispatchEvent(loadEvent);
+            }
+        };
+
+        Object.defineProperty(this, "src", {
+            set: function setSrc(value) {
+                holographic.nativeInterface.eventing.setCallback(this.native, this.nativeCallback.bind(this));
+                holographic.nativeInterface.video.setVideoSource(this.native, value);
+            },
+            get: function getSrc() {
+                return this.source;
+            }
+        });
+
+        Object.defineProperty(this, "readyState", {
+            get: function getReadyState() {
+                return this._readyState;
+            }
+        });
     }
 
     HTMLVideoElement.prototype = O.create(impl.HTMLMediaElement.prototype, {
         _idlName: constant("HTMLVideoElement"),
+
+        getData: constant(function getData() {
+            return this.native;      
+        }),
     });
 
     // impl.Element.reflectURLAttribute(HTMLVideoElement,"poster");
