@@ -15,10 +15,12 @@ function Window() {
 
     this.callbackFromNative = function (type) {
         if (type === this.input.vsync) {
-            var capturedCallback = holographic.drawCallback;
-            holographic.drawCallback = null;
-            if (capturedCallback) {
-                capturedCallback();
+            var capturedCallbacks = holographic.drawCallbacks;
+            holographic.drawCallbacks = [];
+            if (capturedCallbacks) {
+                for (var callback in capturedCallbacks) {
+                    capturedCallbacks[callback]();
+                }
             }
         } else if (type === this.input.resize) {
             var resizeEvent = this.document.createEvent("Event");

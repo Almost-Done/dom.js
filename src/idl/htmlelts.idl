@@ -400,6 +400,7 @@ interface HTMLCanvasElement : HTMLElement {
   readonly attribute unsigned long clientWidth;
   readonly attribute unsigned long clientHeight;
   RenderingContext getContext(DOMString type);
+  DOMString toDataURL(in DOMString type, in optional double encoderOptions);
 };
 
 interface HTMLHoloCanvasElementExp : HTMLElement {
@@ -554,6 +555,7 @@ interface HTMLVideoElement : HTMLMediaElement {
   readonly attribute unsigned long videoWidth;
   readonly attribute unsigned long videoHeight;
            attribute DOMString poster;
+           NativeImageData getData();
 };
 
 [NamedConstructor=Audio(),
