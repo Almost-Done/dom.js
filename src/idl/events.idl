@@ -96,3 +96,9 @@ interface SpatialInputEvent : UIEvent {
                                               in double zArg,
                                               in double sourceKindArg);
 };
+
+interface WebGLContextEvent : UIEvent {
+  readonly attribute DOMString       e;
+  void                               initWebGLContextEvent(in DOMString type,
+                                              in DOMString e);
+};

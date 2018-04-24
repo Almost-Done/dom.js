@@ -10,7 +10,7 @@ function Window() {
     this.input = { 
         "resize": 0,  "mouse" : 1, "keyboard" : 2, 
         "spatialinput" : 3, "spatialmapping" : 4, "vsync": 5,
-        "voice" : 6
+        "voice" : 6, "devicecontext" : 7
     };
 
     this.callbackFromNative = function (type) {
@@ -39,6 +39,9 @@ function Window() {
         } else if (type === this.input.voice) {
             let voiceEvent = holographic.canvas.dispatchVoiceFromWindow(arguments[1], arguments[2], arguments[3]);
             this.dispatchEvent(voiceEvent);
+        } else if (type === this.input.devicecontext) {
+            let contextEvent = holographic.canvas.dispatchContextEventFromWindow(arguments[1]);
+            this.dispatchEvent(contextEvent);
         }
     };
 

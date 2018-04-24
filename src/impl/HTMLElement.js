@@ -528,6 +528,7 @@ defineLazyProperty(impl, "HTMLHoloCanvasElementExp", function() {
         this.keyboardEvents = ['keydown', 'keyup'];
         this.mouseEvents = ['mouseup', 'mousedown', 'mousemove', 'wheel'];
         this.voiceEvents = ['voicecommand'];
+        this.contextEvents = ['webglcontextlost', 'webglcontextrestored'];
     }
 
     HTMLHoloCanvasElementExp.prototype = O.create(impl.HTMLElement.prototype, {
@@ -623,6 +624,12 @@ defineLazyProperty(impl, "HTMLHoloCanvasElementExp", function() {
             let spatialInputEvent = this.ownerDocument.createEvent("SpatialInputEvent");
             spatialInputEvent.initSpatialInputEvent(this.spatialInputEvents[typeId], isPressedArg, xArg, yArg, zArg, sourceKindArg, true, true, )
             this.dispatchEvent(spatialInputEvent);
+        }),
+
+        dispatchContextEventFromWindow: constant(function dispatchContextEventFromWindow(typeId, e) {
+            let contextEvent = this.ownerDocument.createEvent("WebGLContextEvent");
+            contextEvent.initWebGLContextEvent(this.contextEvents[typeId], e, true, true)
+            this.dispatchEvent(contextEvent);
         }),
     });
 
