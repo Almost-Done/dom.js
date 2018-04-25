@@ -42,8 +42,7 @@ function Window() {
             let voiceEvent = holographic.canvas.dispatchVoiceFromWindow(arguments[1], arguments[2], arguments[3]);
             this.dispatchEvent(voiceEvent);
         } else if (type === this.input.devicecontext) {
-            let contextEvent = holographic.canvas.dispatchContextEventFromWindow(arguments[1]);
-            this.dispatchEvent(contextEvent);
+            holographic.canvas.dispatchContextEventFromWindow(arguments[1]);
         }
     };
 

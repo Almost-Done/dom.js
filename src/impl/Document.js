@@ -49,7 +49,7 @@ defineLazyProperty(impl, "Document", function() {
         wheelevent: "WheelEvent",
         voiceevent: "VoiceEvent",
         spatialinputevent: "SpatialInputEvent",
-        devicecontextevent = "WebGLContextEvent"
+        webglcontextevent: "WebGLContextEvent"
     };
 
     // Certain arguments to document.createEvent() must be treated specially
